@@ -1,16 +1,152 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock Timer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: white;
+            margin-top: 0;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        #timer {
+            font-size: 2.8rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .date-section {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ffcc00;
+        }
+        
+        .time-section {
+            font-size: 3.2rem;
+        }
+        
+        .format-selector {
+            margin-top: 25px;
+        }
+        
+        select {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .instruction {
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+    <div class="container">
+        <h1>Digital Clock Timer</h1>
+        <p id="timer">
+            <span class="date-section">Loading date...</span>
+            <br>
+            <span class="time-section">Loading time...</span>
+        </p>
+        
+        <div class="format-selector">
+            <select id="formatSelector">
+                <option value="12">12-Hour Format</option>
+                <option value="24">24-Hour Format</option>
+            </select>
+        </div>
+        
+        <p class="instruction">This clock updates in real-time every second</p>
+    </div>
 
+    <script>
+        // Get DOM elements
+        const timerElement = document.getElementById('timer');
+        const dateSection = document.querySelector('.date-section');
+        const timeSection = document.querySelector('.time-section');
+        const formatSelector = document.getElementById('formatSelector');
+        
+        let timeFormat = '12'; // Default to 12-hour format
+        
+        // Update the clock display
+        function updateClock() {
+            const now = new Date();
+            
+            // Format date
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString(undefined, options);
+            
+            // Format time based on selected format
+            let timeString;
+            if (timeFormat === '12') {
+                timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: true 
+                });
+            } else {
+                timeString = now.toLocaleTimeString('en-US', { 
+                    hour: '2-digit', 
+                    minute: '2-digit', 
+                    second: '2-digit',
+                    hour12: false 
+                });
+            }
+            
+            // Update the DOM
+            dateSection.textContent = dateString;
+            timeSection.textContent = timeString;
+        }
+        
+        // Event listener for format change
+        formatSelector.addEventListener('change', function() {
+            timeFormat = this.value;
+            updateClock();
+        });
+        
+        // Initial call to display clock immediately
+        updateClock();
+        
+        // Update clock every second
+        setInterval(updateClock, 1000);
+    </script>
 </body>
-
 </html>
